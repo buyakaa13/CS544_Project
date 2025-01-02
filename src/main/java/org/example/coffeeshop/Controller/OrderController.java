@@ -45,7 +45,7 @@ public class OrderController {
     }
 
     @GetMapping(path="/{id}", produces = { "application/json", "application/xml"})
-    public ResponseEntity<Order> getOrderById(@PathVariable Long id){
+    public ResponseEntity<Order> getOrderById(@PathVariable("id") Long id){
         Order order = orderService.getOrderById(id);
         if(order == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found");
@@ -74,7 +74,7 @@ public class OrderController {
     }
 
     @DeleteMapping(path ="/{id}", produces = { "application/json", "application/xml"})
-    private ResponseEntity<String> deletedById(@PathVariable Long id){
+    private ResponseEntity<String> deletedById(@PathVariable("id") Long id){
         try {
             orderService.deleteByOrderId(id);
             return ResponseEntity.ok("Successfully deleted!");
@@ -85,7 +85,7 @@ public class OrderController {
     }
 
     @PutMapping(produces = { "application/json", "application/xml"})
-    private ResponseEntity<Order> updateOrder(@RequestBody Order order, @RequestParam Long id){
+    private ResponseEntity<Order> updateOrder(@RequestBody Order order, @RequestParam("id") Long id){
         Order updatedOrder = orderService.getOrderById(id);
         if(order == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Order not found");
@@ -99,7 +99,7 @@ public class OrderController {
 
     @GetMapping(path = "/findByYearAndMonth", produces = {"application/json", "application/xml"})
     @Secured({"ROLE_MANAGER"})
-    public ResponseEntity<List<Order>> findByYearAndMonth(@RequestParam int year, @RequestParam int month){
+    public ResponseEntity<List<Order>> findByYearAndMonth(@RequestParam("year") int year, @RequestParam("month") int month){
         List<Order> orders = orderService.findByYearAndMonth(year, month);
         if(orders.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Orders not found");
@@ -121,7 +121,7 @@ public class OrderController {
     String orderQueue;
 
     @PostMapping(path = "/senNotif", produces = {"application/json", "application/xml"})
-    public void sendNotification(@RequestHeader(name = "Accept-Language", required = false) Locale locale, @RequestParam String orderId) throws JSONException {
+    public void sendNotification(@RequestHeader(name = "Accept-Language", required = false) Locale locale, @RequestParam("orderId") String orderId) throws JSONException {
         JSONObject obj = new JSONObject();
         obj.put("id", orderId);
         obj.put("message", messageSource.getMessage("order.ready", null, locale));
@@ -129,7 +129,7 @@ public class OrderController {
     }
 
     @GetMapping(path = "/findOrderByItemName", produces = {"application/json", "application/xml"})
-    public ResponseEntity<List<Order>> findOrderByItemName(@RequestParam String itemName){
+    public ResponseEntity<List<Order>> findOrderByItemName(@RequestParam("itemName") String itemName){
         List<Order> orders = orderService.findOrderByItemName(itemName);
         if(orders.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Orders not found");

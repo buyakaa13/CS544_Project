@@ -29,7 +29,7 @@ public class ItemController {
     }
 
     @GetMapping(path="/{id}", produces = { "application/json", "application/xml"})
-    public ResponseEntity<Item> getItemById(@PathVariable Long id){
+    public ResponseEntity<Item> getItemById(@PathVariable("id") Long id){
         Item item = itemService.getItemById(id);
         if(item == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Item not found");
@@ -46,7 +46,7 @@ public class ItemController {
     }
 
     @DeleteMapping(path ="/{id}", produces = { "application/json", "application/xml"})
-    public ResponseEntity<String> deletedById(@PathVariable Long id){
+    public ResponseEntity<String> deletedById(@PathVariable("id") Long id){
         try {
             itemService.deleteItemById(id);
             return ResponseEntity.ok("Successfully deleted!");
@@ -57,7 +57,7 @@ public class ItemController {
     }
 
     @PutMapping(produces = { "application/json", "application/xml"})
-    public ResponseEntity<Item> updateItem(@RequestBody Item item, @RequestParam Long id){
+    public ResponseEntity<Item> updateItem(@RequestBody Item item, @RequestParam("id") Long id){
         Item updatedItem = itemService.getItemById(id);
         if(item == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Item not found");
@@ -69,7 +69,7 @@ public class ItemController {
     }
 
     @GetMapping(path = "/findByName", produces = {"application/json", "application/xml"})
-    public ResponseEntity<Item> findByName(@RequestParam String name){
+    public ResponseEntity<Item> findByName(@RequestParam("name") String name){
         Item item = itemService.findByName(name);
         if(item == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Item not found");
@@ -78,7 +78,7 @@ public class ItemController {
     }
 
     @GetMapping(path="/findByCategory", produces = {"application/json", "application/xml"})
-    public ResponseEntity<List<Item>> findByCategory(@RequestParam Category category){
+    public ResponseEntity<List<Item>> findByCategory(@RequestParam("category") Category category){
         List<Item> items = itemService.findByCategory(category);
         if(items.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Items not found");
@@ -87,7 +87,7 @@ public class ItemController {
     }
 
     @GetMapping(path = "/findByPriceBetween", produces = {"application/json", "application/xml"})
-    public ResponseEntity<List<Item>> findByPriceBetween(@RequestParam int min, @RequestParam int max){
+    public ResponseEntity<List<Item>> findByPriceBetween(@RequestParam("min") int min, @RequestParam("max") int max){
         List<Item> items = itemService.findByPriceBetween(min, max);
         if(items.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Items not found");
@@ -96,7 +96,7 @@ public class ItemController {
     }
 
     @GetMapping(path = "/hasPriceMoreThanCriteria", produces = {"application/json", "application/xml"})
-    public ResponseEntity<List<Item>> hasPriceMoreThanCriteria(@RequestParam double price){
+    public ResponseEntity<List<Item>> hasPriceMoreThanCriteria(@RequestParam("price") double price){
         List<Item> items = itemService.hasPriceMoreThanCriteria(price);
         if(items.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Items not found");

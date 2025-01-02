@@ -26,7 +26,7 @@ public class PaymentController {
     }
 
     @GetMapping(path="/{id}", produces = { "application/json", "application/xml"})
-    public ResponseEntity<Payment> getPaymentById(@PathVariable Long id){
+    public ResponseEntity<Payment> getPaymentById(@PathVariable("id") Long id){
         Payment payment = paymentService.getPaymentById(id);
         if(payment == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Payment not found");
@@ -43,7 +43,7 @@ public class PaymentController {
     }
 
     @DeleteMapping(path ="/{id}", produces = { "application/json", "application/xml"})
-    public ResponseEntity<Void> deletedById(@PathVariable Long id){
+    public ResponseEntity<Void> deletedById(@PathVariable("id") Long id){
         try {
             paymentService.deletePaymentById(id);
             return ResponseEntity.noContent().build();
@@ -54,7 +54,7 @@ public class PaymentController {
     }
 
     @PutMapping(produces = { "application/json", "application/xml"})
-    public ResponseEntity<Payment> updatePayment(@RequestBody Payment payment, @RequestParam Long id){
+    public ResponseEntity<Payment> updatePayment(@RequestBody Payment payment, @RequestParam("id") Long id){
         Payment updatedPayment = paymentService.getPaymentById(id);
         if(payment == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Payment not found");
@@ -65,7 +65,7 @@ public class PaymentController {
     }
 
     @GetMapping(path="/findByOrderId", produces = {"application/json", "application/xml"})
-    public ResponseEntity<Payment> findByOrderId(@RequestParam Long orderId){
+    public ResponseEntity<Payment> findByOrderId(@RequestParam("orderId") Long orderId){
         Payment payment = paymentService.findByOrderId(orderId);
         if(payment == null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Payment not found");
@@ -75,7 +75,7 @@ public class PaymentController {
 
     @GetMapping(path = "/getAllByYearAndMonth", produces = {"application/json", "application/xml"})
     @Secured({"ROLE_MANAGER"})
-    public ResponseEntity<List<Payment>> getAllByYearAndMonth(@RequestParam int year, @RequestParam int month){
+    public ResponseEntity<List<Payment>> getAllByYearAndMonth(@RequestParam("year") int year, @RequestParam("month") int month){
         List<Payment> payments = paymentService.getAllByYearAndMonth(year, month);
         if(payments.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Payments not found");
