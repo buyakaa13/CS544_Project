@@ -20,7 +20,7 @@ public class Item {
     private int quantity;
 
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
+//    @JsonManagedReference
     private List<OrderItem> orderItems;
 
     public String getName() {
